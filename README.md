@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# argilla-component
-=======
 argilla-component
 =============
 
@@ -84,4 +81,3 @@ Integration
 For information about deployment and integration with KBC, please refer to the
 [deployment section of developers
 documentation](https://developers.keboola.com/extend/component/deployment/)
->>>>>>> 30777e6 ("Initial commit")

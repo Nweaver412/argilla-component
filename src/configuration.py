@@ -4,7 +4,6 @@ from keboola.component.exceptions import UserException
 
 
 class Configuration(BaseModel):
-    print_hello: bool
     api_token: str = Field(alias="#api_token")
     debug: bool = False
 
@@ -18,8 +17,4 @@ class Configuration(BaseModel):
         if self.debug:
             logging.debug("Component will run in Debug mode")
 
-    @field_validator('api_token')
-    def token_must_be_uppercase(cls, v):
-        if not v.isupper():
-            raise UserException('API token must be uppercase')
-        return v
+    
