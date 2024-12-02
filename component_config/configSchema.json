@@ -2,7 +2,8 @@
   "type": "object",
   "title": "Argilla Configuration",
   "required": [
-    "#api_token"
+    "#api_token",
+    "#hf_token"
   ],
   "properties": {
     "#api_token": {
@@ -10,6 +11,12 @@
       "format": "token",
       "title": "API token",
       "propertyOrder": 1
+    },
+    "#hf_token": {
+      "type": "string",
+      "format": "token",
+      "title": "HuggingFace token",
+      "propertyOrder": 2
     },
     "settings": {
       "type": "object",
@@ -23,97 +30,61 @@
           "default": "Review each entry to confirm the relevancy and accuracy of the fields. Provide edits or updates where needed. Determine if the response satisfactorily answers the user's question. For example, a satisfactory response directly addresses the user's query with accurate information, while an unsatisfactory response may be off-topic or contain inaccuracies."
         },
         "fields": {
-          "type": "array",
           "title": "Fields",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string",
-                "title": "Field Name"
-              },
-              "title": {
-                "type": "string",
-                "title": "Field Title"
-              },
-              "use_markdown": {
-                "type": "boolean",
-                "title": "Use Markdown",
-                "default": false
-              }
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "Field Name"
             },
-            "required": ["name", "title"]
-          },
-          "default": [
-            { "name": "prompt", "title": "User's Question (Prompt)", "use_markdown": false },
-            { "name": "response", "title": "Agent's Response", "use_markdown": false },
-            { "name": "context", "title": "Context of the Conversation", "use_markdown": false },
-            { "name": "keywords", "title": "Keywords Associated with the Entry", "use_markdown": false },
-            { "name": "category", "title": "Category of the Entry", "use_markdown": false },
-            { "name": "references", "title": "References (e.g., links, documents)", "use_markdown": false }
-          ]
-        },
-        "questions": {
-          "type": "array",
-          "title": "Questions",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string",
-                "title": "Question Name"
-              },
-              "title": {
-                "type": "string",
-                "title": "Question Title"
-              },
-              "labels": {
-                "type": "array",
-                "title": "Labels",
-                "items": {
-                  "type": "string"
-                }
-              }
+            "title": {
+              "type": "string",
+              "title": "Field Title"
             },
-            "required": ["name", "title", "labels"]
+            "use_markdown": {
+              "type": "boolean",
+              "title": "Use Markdown",
+              "default": false
+            }
           },
+          "required": [
+            "name",
+            "title"
+          ],
           "default": [
             {
-              "name": "is_response_satisfactory",
-              "title": "Would this response be 100% satisfactory to the user's question?",
-              "labels": ["Yes", "No"]
+              "name": "prompt",
+              "title": "User's Question (Prompt)",
+              "use_markdown": false
+            },
+            {
+              "name": "response",
+              "title": "Agent's Response",
+              "use_markdown": false
+            },
+            {
+              "name": "context",
+              "title": "Context of the Conversation",
+              "use_markdown": false
+            },
+            {
+              "name": "keywords",
+              "title": "Keywords Associated with the Entry",
+              "use_markdown": false
+            },
+            {
+              "name": "category",
+              "title": "Category of the Entry",
+              "use_markdown": false
+            },
+            {
+              "name": "references",
+              "title": "References (e.g., links, documents)",
+              "use_markdown": false
             }
           ]
-        },
-        "metadata": {
-          "type": "array",
-          "title": "Metadata",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string",
-                "title": "Metadata Name"
-              },
-              "title": {
-                "type": "string",
-                "title": "Metadata Title"
-              }
-            },
-            "required": ["name", "title"]
-          },
-          "default": [
-            { "name": "conversation_date", "title": "Date of Conversation" },
-            { "name": "source_platform", "title": "Source Platform" }
-          ]
-        },
-        "allow_extra_metadata": {
-          "type": "boolean",
-          "title": "Allow Extra Metadata",
-          "default": true
         }
-      },
-      "required": ["guidelines", "fields", "questions", "metadata", "allow_extra_metadata"]
+      }
     }
   }
 }

@@ -13,15 +13,12 @@ class Component(ComponentBase):
         super().__init__()
 
     def run(self):
-        """
-        Main execution code
-        """
 
         # Load configuration
         params = Configuration(**self.configuration.parameters)
 
         # Authenticate with Argilla
-        rg.init(api_key=params.api_token)
+        rg.init(api_key=params.pswd_api_token)
 
         # Get input tables
         input_tables = self.get_input_tables_definitions()
@@ -37,13 +34,36 @@ class Component(ComponentBase):
         with open(input_table.full_path, mode='r', encoding='utf-8') as inp_file:
             reader = csv.DictReader(inp_file)
             for row in reader:
-                # Transform rows to Argilla record format
-                records.append(
-                    rg.TextClassificationRecord(
-                        text=row.get("text", ""),
-                        metadata=row,  # Store the rest of the row as metadata
+                # Extract relevant fields
+                prompt = row.get("prompt", "").strip()
+                response = row.get("response", "").strip()
+                context = row.get("context", "").strip()
+                keywords = row.get("keywords", "")
+                category = row.get("category", "").strip()
+                references = row.get("references", "")
+
+                # Only create and append a record if `prompt` and `response` are not empty
+                if prompt and response:
+                    # Process keywords and references into strings
+                    keywords_str = ', '.join(kw.strip() for kw in keywords.split(',') if kw.strip()) if keywords else ""
+                    references_str = '; '.join(ref.strip() for ref in references.split(';') if ref.strip()) if references else ""
+
+                    # Create the record
+                    record = rg.Record(
+                        fields={
+                            "prompt": prompt,
+                            "response": response,
+                            "context": context,
+                            "keywords": keywords_str,
+                            "category": category,
+                            "references": references_str,
+                        },
+                        metadata={
+                            "conversation_date": row.get("conversation_date", "").strip(),
+                            "source_platform": row.get("source_platform", "").strip(),
+                        }
                     )
-                )
+                    records.append(record)
 
         # Create or append to Argilla dataset
         dataset_name = f"my_keboola_dataset_{datetime.now().strftime('%Y%m%d%H%M%S')}"
