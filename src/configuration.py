@@ -41,6 +41,8 @@ class ArgillaSettings(ConfigurationBase):
 
 @dataclass
 class Configuration(ConfigurationBase):
-    pswd_api_token: str
-    pswd_hf_token: str
+    data_name: str  
+    api_url: str  
+    pswd_api_token: str  
+    pswd_hf_token: str  
     argilla: ArgillaSettings

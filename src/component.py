@@ -13,12 +13,42 @@ class Component(ComponentBase):
         super().__init__()
 
     def run(self):
-
         # Load configuration
         params = Configuration(**self.configuration.parameters)
 
         # Authenticate with Argilla
-        rg.init(api_key=params.pswd_api_token)
+        rg.init(
+            api_url=params.api_url,
+            api_key=params.pswd_api_token
+        )
+
+        # Define dataset settings
+        settings = rg.Settings(
+            guidelines="Please label the data accurately and review additional fields for completeness.",
+            fields=[
+                rg.TextField(name="text"),
+                rg.TextField(name="messageId"),
+                rg.TextField(name="partId"),
+                rg.TextField(name="mimeType"),
+                rg.TextField(name="bodySize"),
+                rg.TextField(name="bodyData"),
+            ],
+            questions=[
+                rg.LabelQuestion(
+                    name="label",
+                    labels=["yes", "no"]
+                )
+            ],
+        )
+
+        # Create the Argilla dataset
+        dataset_name = f"{params.argilla.dataset_name_prefix}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        dataset = rg.Dataset(
+            name=dataset_name,
+            settings=settings,
+        )
+        dataset.create()
+        logging.info(f"Dataset {dataset_name} created in Argilla.")
 
         # Get input tables
         input_tables = self.get_input_tables_definitions()
@@ -33,38 +63,30 @@ class Component(ComponentBase):
         with open(input_table.full_path, mode='r', encoding='utf-8') as inp_file:
             reader = csv.DictReader(inp_file)
             for row in reader:
-                # Extract relevant fields
-                status = row.get("status", "").strip()
-                server_id = row.get("response", "").strip()
-                persona = row.get("persona", "").strip()
-                image = row.get("image", "")
-                # category = row.get("category", "").strip()
-                # references = row.get("references", "")
+                text = row.get("text", "").strip()
+                messageId = row.get("messageId", "").strip()
+                partId = row.get("partId", "").strip()
+                mimeType = row.get("mimeType", "").strip()
+                bodySize = row.get("bodySize", "").strip()  
+                bodyData = row.get("bodyData", "").strip()  
 
-                # Only create and append a record if `prompt` and `response` are not empty
-                # if prompt and response:
-                #     # Process keywords and references into strings
-                #     keywords_str = ', '.join(kw.strip() for kw in keywords.split(',') if kw.strip()) if keywords else ""
-                #     references_str = '; '.join(ref.strip() for ref in references.split(';') if ref.strip()) if references else ""
+                label = row.get("label", "").strip()
 
-                    # Create the record
-                record = rg.Record(
-                    fields={
-                        "status": status,
-                        "_server_id": server_id,
-                        "persona": persona,
-                        "image": image,
-                        # "category": category,
-                        # "references": references_str,
-                    },
-                )
-                records.append(record)
+                if text and label:  # Ensure necessary fields are present
+                    record = {
+                        "text": text,
+                        "messageId": messageId,
+                        "partId": partId,
+                        "mimeType": mimeType,
+                        "bodySize": bodySize,
+                        "bodyData": bodyData,
+                        "label": label
+                    }
+                    records.append(record)
 
-        # Create or append to Argilla dataset
-        dataset_name = f"my_keboola_dataset_{datetime.now().strftime('%Y%m%d%H%M%S')}"
-        rg.log(records, name=dataset_name, workspace="default")
-
-        logging.info(f"Data written to Argilla dataset: {dataset_name}")
+        # Log records to Argilla
+        dataset.records.log(records)
+        logging.info(f"{len(records)} records logged to Argilla dataset: {dataset_name}")
 
         # Write new state
         self.write_state_file({"last_dataset_name": dataset_name})
