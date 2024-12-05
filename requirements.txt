@@ -4,4 +4,4 @@ keboola.http-client
 freezegun
 mock
 pydantic
-argilla==2.4.0
+argilla
