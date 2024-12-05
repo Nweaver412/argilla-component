@@ -32,12 +32,12 @@ class ConfigurationBase:
                 and f.default_factory == dataclasses.MISSING]
 
 
-@dataclass
-class ArgillaSettings(ConfigurationBase):
-    workspace: str
-    dataset_name_prefix: str
-    fields: Optional[List[str]] = None
-    metadata_keys: Optional[List[str]] = None
+# @dataclass
+# class ArgillaSettings(ConfigurationBase):
+#     workspace: str
+#     dataset_name_prefix: str
+#     fields: Optional[List[str]] = None
+#     metadata_keys: Optional[List[str]] = None
 
 @dataclass
 class Configuration(ConfigurationBase):
@@ -45,4 +45,3 @@ class Configuration(ConfigurationBase):
     api_url: str  
     pswd_api_token: str  
     pswd_hf_token: str  
-    argilla: ArgillaSettings
