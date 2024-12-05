@@ -3,59 +3,33 @@
   "title": "Argilla Configuration",
   "required": [
     "#api_token",
-    "#hf_token"
+    "#hf_token",
+    "data_name"
   ],
   "properties": {
+    "data_name": {
+      "type": "string",
+      "title": "Data Name",
+      "description": "Name of the data source",
+      "propertyOrder": 1
+    },
+    "api_url": {
+      "type": "string",
+      "title": "API URL",
+      "description": "URL to hugging face space",
+      "propertyOrder": 2
+    },
     "#api_token": {
       "type": "string",
       "format": "token",
       "title": "API token",
-      "propertyOrder": 1
+      "propertyOrder": 3
     },
     "#hf_token": {
       "type": "string",
       "format": "token",
       "title": "HuggingFace token",
-      "propertyOrder": 2
-    },
-    "settings": {
-      "type": "object",
-      "title": "Argilla Settings",
-      "description": "Review each entry to confirm the relevancy and accuracy of the fields. Provide edits or updates where needed. Determine if the response satisfactorily answers the user's question. For example, a satisfactory response directly addresses the user's query with accurate information, while an unsatisfactory response may be off-topic or contain inaccuracies.",
-      "properties": {
-        "properties": {
-          "prompt": {
-            "title": "Prompt",
-            "description": "User's Question (Prompt)",
-            "type": "string"
-          },
-          "response": {
-            "title": "Response",
-            "description": "Agent's Response",
-            "type": "string"
-          },
-          "context": {
-            "title": "Context",
-            "description": "Context of the conversation",
-            "type": "string"
-          },
-          "keywords": {
-            "title": "Keywords",
-            "description": "Keywords associated with the entry",
-            "type": "string"
-          },
-          "category": {
-            "title": "Category",
-            "description": "Category of the entry",
-            "type": "string"
-          },
-          "references": {
-            "title": "References",
-            "description": "References (e.g., links, documents)",
-            "type": "string"
-          }
-        }
-      }
+      "propertyOrder": 4
     }
   }
 }

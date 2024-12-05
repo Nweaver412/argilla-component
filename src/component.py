@@ -25,7 +25,6 @@ class Component(ComponentBase):
         if len(input_tables) == 0:
             raise UserException("No input tables found")
 
-        # Assuming first table is the one to process
         input_table = input_tables[0]
         logging.info(f'Processing table: {input_table.name}')
 
@@ -35,35 +34,31 @@ class Component(ComponentBase):
             reader = csv.DictReader(inp_file)
             for row in reader:
                 # Extract relevant fields
-                prompt = row.get("prompt", "").strip()
-                response = row.get("response", "").strip()
-                context = row.get("context", "").strip()
-                keywords = row.get("keywords", "")
-                category = row.get("category", "").strip()
-                references = row.get("references", "")
+                status = row.get("status", "").strip()
+                server_id = row.get("response", "").strip()
+                persona = row.get("persona", "").strip()
+                image = row.get("image", "")
+                # category = row.get("category", "").strip()
+                # references = row.get("references", "")
 
                 # Only create and append a record if `prompt` and `response` are not empty
-                if prompt and response:
-                    # Process keywords and references into strings
-                    keywords_str = ', '.join(kw.strip() for kw in keywords.split(',') if kw.strip()) if keywords else ""
-                    references_str = '; '.join(ref.strip() for ref in references.split(';') if ref.strip()) if references else ""
+                # if prompt and response:
+                #     # Process keywords and references into strings
+                #     keywords_str = ', '.join(kw.strip() for kw in keywords.split(',') if kw.strip()) if keywords else ""
+                #     references_str = '; '.join(ref.strip() for ref in references.split(';') if ref.strip()) if references else ""
 
                     # Create the record
-                    record = rg.Record(
-                        fields={
-                            "prompt": prompt,
-                            "response": response,
-                            "context": context,
-                            "keywords": keywords_str,
-                            "category": category,
-                            "references": references_str,
-                        },
-                        metadata={
-                            "conversation_date": row.get("conversation_date", "").strip(),
-                            "source_platform": row.get("source_platform", "").strip(),
-                        }
-                    )
-                    records.append(record)
+                record = rg.Record(
+                    fields={
+                        "status": status,
+                        "_server_id": server_id,
+                        "persona": persona,
+                        "image": image,
+                        # "category": category,
+                        # "references": references_str,
+                    },
+                )
+                records.append(record)
 
         # Create or append to Argilla dataset
         dataset_name = f"my_keboola_dataset_{datetime.now().strftime('%Y%m%d%H%M%S')}"
