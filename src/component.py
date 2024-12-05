@@ -83,23 +83,23 @@ class Component(ComponentBase):
                 bodyData = row.get("bodyData", "").strip()  
 
                 label = row.get("label", "").strip()
-
-                record = {
-                    "text": text,
-                    "messageId": messageId,
-                    "partId": partId,
-                    "mimeType": mimeType,
-                    "bodySize": bodySize,
-                    "bodyData": bodyData,
-                    "label": label
-                }
+                record = rg.Record(
+                    fields ={
+                        "text": text,
+                        "messageId": messageId,
+                        "partId": partId,
+                        "mimeType": mimeType,
+                        "bodySize": bodySize,
+                        "bodyData": bodyData,
+                        "label": label
+                    }
+                )
                 records.append(record)
 
         # Log records to Argilla
         dataset.records.log(records)
-        logging.info(f"{len(records)} records logged to Argilla dataset: {dataset_name}")
-
-        self.write_state_file({"last_dataset_name": dataset_name})
+        
+        logging.info(f"{len(records)} records logged to dataset: {dataset_name}")
 
 
 
