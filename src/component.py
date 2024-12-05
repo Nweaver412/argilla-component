@@ -52,7 +52,7 @@ class Component(ComponentBase):
         # Create the Argilla dataset
         dataset_name = self._configuration.data_name
         print(dataset_name)
-        logging.info(dataset_name)
+        # logging.info(dataset_name) #confirming dataset name
 
         dataset = rg.Dataset(
             name=dataset_name,
