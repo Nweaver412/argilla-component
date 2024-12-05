@@ -11,14 +11,20 @@ from configuration import Configuration
 class Component(ComponentBase):
     def __init__(self):
         super().__init__()
+        self._configuration = None
+        self.client = None
+
+    def init_configuration(self):
+        self.validate_configuration_parameters(Configuration.get_dataclass_required_parameters())
+        self._configuration: Configuration = Configuration.load_from_dict(self.configuration.parameters)
 
     def run(self):
-        params = Configuration(**self.configuration.parameters)
+        self.init_configuration()
 
         # Auth
         rg.Argilla(
-            api_url= params.pswd_api_token,
-            api_key= params.pswd_hf_token
+            api_url = self._configuration.api_url,
+            api_key = self._configuration.pswd_api_token
         )
 
         # INIT SETTINGS TO ARGILLA SETTINGS
@@ -42,7 +48,7 @@ class Component(ComponentBase):
         )
 
         # Create the Argilla dataset
-        dataset_name = f"{params.argilla.dataset_name_prefix}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        dataset_name = f"{self._configuration.argilla.dataset_name_prefix}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
         dataset = rg.Dataset(
             name=dataset_name,
             settings=settings,
@@ -89,6 +95,7 @@ class Component(ComponentBase):
         logging.info(f"{len(records)} records logged to Argilla dataset: {dataset_name}")
 
         self.write_state_file({"last_dataset_name": dataset_name})
+
 
 
 """
