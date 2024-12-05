@@ -49,6 +49,9 @@ class Component(ComponentBase):
 
         # Create the Argilla dataset
         dataset_name = f"{self._configuration.argilla.dataset_name_prefix}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        print(dataset_name)
+        logging.info(dataset_name)
+        
         dataset = rg.Dataset(
             name=dataset_name,
             settings=settings,
