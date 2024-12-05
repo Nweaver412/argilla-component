@@ -13,16 +13,16 @@ class Component(ComponentBase):
         super().__init__()
 
     def run(self):
-        # Load configuration
         params = Configuration(**self.configuration.parameters)
 
-        # Authenticate with Argilla
-        rg.init(
-            api_url=params.api_url,
-            api_key=params.pswd_api_token
+        # Auth
+        rg.Argilla(
+            api_url= params.pswd_api_token,
+            api_key= params.pswd_hf_token
         )
 
-        # Define dataset settings
+        # INIT SETTINGS TO ARGILLA SETTINGS
+
         settings = rg.Settings(
             guidelines="Please label the data accurately and review additional fields for completeness.",
             fields=[
