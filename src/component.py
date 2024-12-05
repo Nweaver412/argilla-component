@@ -28,6 +28,7 @@ class Component(ComponentBase):
         )
         print(self._configuration.api_url)
         print(self._configuration.pswd_api_token)
+
         # INIT SETTINGS TO ARGILLA SETTINGS
 
         settings = rg.Settings(
@@ -49,7 +50,7 @@ class Component(ComponentBase):
         )
 
         # Create the Argilla dataset
-        dataset_name = f"{self._configuration.argilla.dataset_name_prefix}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        dataset_name = self._configuration.data_name
         print(dataset_name)
         logging.info(dataset_name)
 
