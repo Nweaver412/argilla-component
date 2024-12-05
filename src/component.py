@@ -98,7 +98,7 @@ class Component(ComponentBase):
 
         # Log records to Argilla
         dataset.records.log(records)
-        
+
         logging.info(f"{len(records)} records logged to dataset: {dataset_name}")
 
 
