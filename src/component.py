@@ -82,16 +82,16 @@ class Component(ComponentBase):
                 bodySize = row.get("bodySize", "").strip()  
                 bodyData = row.get("bodyData", "").strip()  
 
-                label = row.get("label", "").strip()
+                # label = row.get("label", "").strip()
                 record = rg.Record(
-                    fields ={
+                    fields = {
                         "text": text,
                         "messageId": messageId,
                         "partId": partId,
                         "mimeType": mimeType,
                         "bodySize": bodySize,
-                        "bodyData": bodyData,
-                        "label": label
+                        "bodyData": bodyData
+                        # "label": label
                     }
                 )
                 records.append(record)
