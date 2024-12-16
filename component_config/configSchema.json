@@ -16,7 +16,7 @@
     "api_url": {
       "type": "string",
       "title": "API URL",
-      "description": "URL to hugging face space",
+      "description": "URL to hugging face",
       "propertyOrder": 2
     },
     "#api_token": {

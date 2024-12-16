@@ -1,1 +1,20 @@
-{}
+{
+    "type": "object",
+    "title": "Configuration",
+    "required": [
+        "table"
+    ],
+    "properties": {
+        "table": {
+        "type": "string",
+        "title": "table name",
+        "watch": {
+            "tables": "_metadata_.tables"
+        },
+        "required": true,
+        "enumSource": "tables",
+        "description": "Choose a table to send to argilla",
+        "propertyOrder": 1
+        }
+    }
+}
