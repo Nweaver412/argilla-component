@@ -20,8 +20,7 @@ class Component(ComponentBase):
 
     def run(self):
         self.init_configuration()
-        # HF_TOKEN = self._configuration.pswd_hf_token
-        HF_TOKEN = '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'
+        HF_TOKEN = self._configuration.pswd_hf_token
         # Auth
         rg.Argilla(
             api_url = self._configuration.api_url,
