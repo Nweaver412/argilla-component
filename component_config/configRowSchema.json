@@ -7,7 +7,7 @@
     "properties": {
         "table": {
         "type": "string",
-        "title": "table name",
+        "title": "Tablename",
         "watch": {
             "tables": "_metadata_.tables"
         },
